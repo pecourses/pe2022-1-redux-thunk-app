@@ -1,11 +1,13 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik'
+import { connect } from 'react-redux'
 import { PURCHASE_VALIDATION_SCHEMA } from '../../../utils/validationSchemas'
+import { createPurchase } from '../../../store/slices/purchasesSlice'
 
-function PurchaseForm () {
+function PurchaseForm ({ create }) {
   const initialValues = { value: '' }
 
   const handleSubmit = (values, formikBag) => {
-    console.log(values)
+    create(values)
     formikBag.resetForm()
   }
 
@@ -24,4 +26,8 @@ function PurchaseForm () {
   )
 }
 
-export default PurchaseForm
+const mapDispatchToProps = dispatch => ({
+  create: values => dispatch(createPurchase(values))
+})
+
+export default connect(null, mapDispatchToProps)(PurchaseForm)
