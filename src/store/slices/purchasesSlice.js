@@ -7,11 +7,10 @@ export const createPurchase = createAsyncThunk(
   `purchases/create`,
   async (values, thunkAPI) => {
     try {
-      console.log('values :>> ', values)
       const response = await createNewPurchase(values)
-      console.log('response :>> ', response)
+      return response.data
     } catch (e) {
-      console.log('e :>> ', e)
+      return thunkAPI.rejectWithValue(e)
     }
   }
 )
@@ -23,7 +22,21 @@ const purchasesSlice = createSlice({
     isFetching: false,
     error: null
   },
-  reducers: {}
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(createPurchase.pending, state => {
+      state.isFetching = true
+      state.error = null
+    })
+    builder.addCase(createPurchase.fulfilled, (state, action) => {
+      state.purchases.push(action.payload)
+      state.isFetching = false
+    }) // action.payload = response.data
+    builder.addCase(createPurchase.rejected, (state, action) => {
+      state.error = action.payload
+      state.isFetching = false
+    })
+  }
 })
 
 const { reducer, actions } = purchasesSlice
