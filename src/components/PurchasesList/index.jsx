@@ -2,13 +2,18 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import {
   deletePurchase,
-  getPurchases
+  getPurchases,
+  updatePurchase
 } from './../../store/slices/purchasesSlice'
 
-function PurchasesList ({ purchases, isFetching, error, get, remove }) {
+function PurchasesList ({ purchases, isFetching, error, get, remove, update }) {
   useEffect(() => {
     get()
   }, [])
+
+  const isBoughtChangeHandler = (id, checked) => {
+    update(id, { isBought: checked })
+  }
 
   return (
     <ul>
@@ -17,6 +22,13 @@ function PurchasesList ({ purchases, isFetching, error, get, remove }) {
       {!error &&
         purchases.map(p => (
           <li key={p.id}>
+            <input
+              type='checkbox'
+              checked={p.isBought}
+              onChange={({ target: { checked } }) =>
+                isBoughtChangeHandler(p.id, checked)
+              }
+            />
             <button
               onClick={() => {
                 remove(p.id)
@@ -35,7 +47,8 @@ const mapStateToProps = ({ purchasesData }) => purchasesData
 
 const mapDispatchToProps = dispatch => ({
   get: () => dispatch(getPurchases()),
-  remove: id => dispatch(deletePurchase(id))
+  remove: id => dispatch(deletePurchase(id)),
+  update: (id, values) => dispatch(updatePurchase({ id, values }))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PurchasesList)

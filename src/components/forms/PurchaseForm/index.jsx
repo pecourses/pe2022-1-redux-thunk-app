@@ -7,7 +7,7 @@ function PurchaseForm ({ create }) {
   const initialValues = { value: '' }
 
   const handleSubmit = (values, formikBag) => {
-    create(values)
+    create({ ...values, isBought: false })
     formikBag.resetForm()
   }
 

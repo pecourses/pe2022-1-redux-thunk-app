@@ -39,6 +39,18 @@ export const deletePurchase = createAsyncThunk(
   }
 )
 
+export const updatePurchase = createAsyncThunk(
+  `${PURCHASES_SLICE_NAME}/update`,
+  async ({ id, values }, thunkAPI) => {
+    try {
+      const response = await API.updatePurchase(id, values)
+      return response.data
+    } catch (e) {
+      return thunkAPI.rejectWithValue({ message: e.message })
+    }
+  }
+)
+
 const purchasesSlice = createSlice({
   name: PURCHASES_SLICE_NAME,
   initialState: {
