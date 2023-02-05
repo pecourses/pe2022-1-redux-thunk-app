@@ -1,5 +1,6 @@
 import './App.css'
 import PurchaseForm from './components/forms/PurchaseForm/index'
+import PurchasesList from './components/PurchasesList/index'
 
 function App () {
   return (
@@ -9,7 +10,7 @@ function App () {
       </header>
       <main>
         <PurchaseForm />
-        {/* <PurchasesList /> */}
+        <PurchasesList />
       </main>
     </>
   )
