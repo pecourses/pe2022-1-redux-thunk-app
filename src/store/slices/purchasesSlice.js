@@ -27,6 +27,18 @@ export const getPurchases = createAsyncThunk(
   }
 )
 
+export const deletePurchase = createAsyncThunk(
+  `${PURCHASES_SLICE_NAME}/delete`,
+  async (payload, thunkAPI) => {
+    try {
+      await API.deletePurchase(payload)
+      return payload
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e)
+    }
+  }
+)
+
 const purchasesSlice = createSlice({
   name: PURCHASES_SLICE_NAME,
   initialState: {
@@ -59,6 +71,19 @@ const purchasesSlice = createSlice({
       state.isFetching = false
     })
     builder.addCase(getPurchases.rejected, (state, action) => {
+      state.error = action.payload
+      state.isFetching = false
+    })
+    // DELETE
+    builder.addCase(deletePurchase.pending, (state, action) => {
+      state.isFetching = true
+      state.error = null
+    })
+    builder.addCase(deletePurchase.fulfilled, (state, action) => {
+      state.purchases = state.purchases.filter(p => p.id !== action.payload)
+      state.isFetching = false
+    })
+    builder.addCase(deletePurchase.rejected, (state, action) => {
       state.error = action.payload
       state.isFetching = false
     })
