@@ -20,7 +20,6 @@ export const getPurchases = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await API.getPurchases()
-      console.log('response :>> ', response)
       return response.data
     } catch (e) {
       return thunkAPI.rejectWithValue(e)
@@ -51,6 +50,18 @@ const purchasesSlice = createSlice({
       state.isFetching = false
     })
     // GET
+    builder.addCase(getPurchases.pending, (state, action) => {
+      state.isFetching = true
+      state.error = null
+    })
+    builder.addCase(getPurchases.fulfilled, (state, action) => {
+      state.purchases.push(...action.payload)
+      state.isFetching = false
+    })
+    builder.addCase(getPurchases.rejected, (state, action) => {
+      state.error = action.payload
+      state.isFetching = false
+    })
   }
 })
 
