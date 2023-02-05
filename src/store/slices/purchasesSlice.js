@@ -99,6 +99,22 @@ const purchasesSlice = createSlice({
       state.error = action.payload
       state.isFetching = false
     })
+    // UPDATE
+    builder.addCase(updatePurchase.pending, state => {
+      state.isFetching = true
+      state.error = null
+    })
+    builder.addCase(updatePurchase.fulfilled, (state, action) => {
+      const foundIndex = state.purchases.findIndex(
+        p => p.id === action.payload.id
+      )
+      state.purchases[foundIndex] = action.payload
+      state.isFetching = false
+    })
+    builder.addCase(updatePurchase.rejected, (state, action) => {
+      state.error = action.payload
+      state.isFetching = false
+    })
   }
 })
 
