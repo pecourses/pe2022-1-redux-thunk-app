@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { createNewPurchase } from '../../api'
+import * as API from '../../api'
 
 const PURCHASES_SLICE_NAME = 'purchases'
 
@@ -7,7 +7,20 @@ export const createPurchase = createAsyncThunk(
   `purchases/create`,
   async (values, thunkAPI) => {
     try {
-      const response = await createNewPurchase(values)
+      const response = await API.createNewPurchase(values)
+      return response.data
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e)
+    }
+  }
+)
+
+export const getPurchases = createAsyncThunk(
+  `${PURCHASES_SLICE_NAME}/get`,
+  async (payload, thunkAPI) => {
+    try {
+      const response = await API.getPurchases()
+      console.log('response :>> ', response)
       return response.data
     } catch (e) {
       return thunkAPI.rejectWithValue(e)
@@ -24,6 +37,7 @@ const purchasesSlice = createSlice({
   },
   reducers: {},
   extraReducers: builder => {
+    // CREATE
     builder.addCase(createPurchase.pending, state => {
       state.isFetching = true
       state.error = null
@@ -36,6 +50,7 @@ const purchasesSlice = createSlice({
       state.error = action.payload
       state.isFetching = false
     })
+    // GET
   }
 })
 

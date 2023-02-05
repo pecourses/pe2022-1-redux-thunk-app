@@ -4,10 +4,7 @@ const httpClient = axios.create({
   baseURL: 'https://ullhgy.sse.codesandbox.io/'
 })
 
-// httpClient
-//   .get('/contacts')
-//   .then(data => console.log('data :>> ', data.data))
-//   .catch(e => console.log('e :>> ', e))
+export const getPurchases = () => httpClient.get('/contacts')
 
 export const createNewPurchase = values => httpClient.post('/contacts', values)
 

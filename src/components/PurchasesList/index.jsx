@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { getPurchases } from './../../store/slices/purchasesSlice'
 
-function PurchasesList ({ purchases, isFetching, error }) {
+function PurchasesList ({ purchases, isFetching, error, get }) {
+  useEffect(() => {
+    get()
+  }, [])
+
   return (
     <ul>
       {isFetching && <div>Loading...</div>}
@@ -13,6 +18,8 @@ function PurchasesList ({ purchases, isFetching, error }) {
 
 const mapStateToProps = ({ purchasesData }) => purchasesData
 
-export default connect(mapStateToProps)(PurchasesList)
+const mapDispatchToProps = dispatch => ({ get: () => dispatch(getPurchases()) })
+
+export default connect(mapStateToProps, mapDispatchToProps)(PurchasesList)
 
 // прописати чанку і builder cases для отримання даних з сервера
