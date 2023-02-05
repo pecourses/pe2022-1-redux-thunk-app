@@ -10,7 +10,7 @@ export const createPurchase = createAsyncThunk(
       const response = await API.createNewPurchase(values)
       return response.data
     } catch (e) {
-      return thunkAPI.rejectWithValue(e)
+      return thunkAPI.rejectWithValue({ message: e.message })
     }
   }
 )
@@ -22,7 +22,7 @@ export const getPurchases = createAsyncThunk(
       const response = await API.getPurchases()
       return response.data
     } catch (e) {
-      return thunkAPI.rejectWithValue(e)
+      return thunkAPI.rejectWithValue({ message: e.message })
     }
   }
 )
@@ -34,7 +34,7 @@ export const deletePurchase = createAsyncThunk(
       await API.deletePurchase(payload)
       return payload
     } catch (e) {
-      return thunkAPI.rejectWithValue(e)
+      return thunkAPI.rejectWithValue({ message: e.message })
     }
   }
 )
@@ -75,7 +75,7 @@ const purchasesSlice = createSlice({
       state.isFetching = false
     })
     // DELETE
-    builder.addCase(deletePurchase.pending, (state, action) => {
+    builder.addCase(deletePurchase.pending, state => {
       state.isFetching = true
       state.error = null
     })
